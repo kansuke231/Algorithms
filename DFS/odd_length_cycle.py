@@ -1,7 +1,7 @@
 # graphs are implemented by dictionary
 # {"a":["b","c"],"b":["c"],"c":["d"],"d":["a"]}
 import random
-
+from collections import defaultdict
 
 def odd_length_cycle(G):
 	# G must be a strongly connected => there must be a cycle
@@ -26,12 +26,7 @@ def explore(G,v):
 	prev[v] = clock
 	clock += 1
 
-	print v
-	print visited,prev,post
-	print clock
-
 	for u in G[v]:
-		print ("u:",u)
 		if visited[u] and (prev[v] > prev[u]): # back edge! 
 			if (prev[v] - prev[u])%2==0:
 				return True # found an odd-length cycle
@@ -50,9 +45,7 @@ if __name__ == "__main__":
 	     "f":["c","d","e"],"g":["a","b","f"],"h":["g"]}
 	G = {"a":["b"],"b":["c"],"c":["d"],"d":["a"]}
 	clock = 1
-	visited,prev,post = {},{},{}
-	for e in G.keys():
-		visited[e],prev[e],post[e] = False,0,0
+	visited,prev,post = defaultdict(bool),defaultdict(int),defaultdict(int)
 
 	print odd_length_cycle(G)
 
