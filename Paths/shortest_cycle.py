@@ -1,34 +1,38 @@
 
 from collections import defaultdict
 
-def explore(G,v,w,visited,prev,clock):
+def explore(G,v,w,visited,prev,post,clock):
 	visited[v] = True
-	prev[v] = clock
-	clock += 1
+	prev[v] = clock[0]
+	clock[0] += 1
 
 	print v,w
+	print "clock_prev:",clock
 	
 	for u,weight in G[v]:
 		if not visited[u]:
-			explore(G,u,w+weight,visited,prev,clock)
+			explore(G,u,w+weight,visited,prev,post,clock)
 		elif visited[u] and (prev[v] > prev[u]): # back edge!
 			global minimum
 			if minimum > w + weight:
 				minimum = w + weight
+	post[v]
+	clock[0]+=1
+	print "clock_post:",clock
 
 def initialize():
-	return defaultdict(bool),defaultdict(int),0
+	return defaultdict(bool),defaultdict(int),defaultdict(int),[1]
 
 def shortest_cycle(G):
 
-	visited,prev,clock = initialize()
+	visited,prev,post,clock = initialize()
 
 	global minimum
 	minimum = 10000000 # arbitrarily determined
 	
 	for v in G.keys():
-		explore(G,v,0,visited,prev,clock)
-		visited,prev,clock = initialize()
+		explore(G,v,0,visited,prev,post,clock)
+		visited,prev,post,clock = initialize()
 		print("--"*20)
 	print minimum
 
